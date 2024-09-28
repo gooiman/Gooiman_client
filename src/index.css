@@ -14,3 +14,18 @@ body {
   background-color: #ecf3ff;
   font-family: 'BMHANNA';
 }
+
+:root {
+  --skyBlue1: #82afff;
+  --skyBlue2: #ecf3ff;
+  --skyBlue3: #f5f8ff;
+  --gray1: #f7f7f7;
+  --gray2: #f4f4f4;
+  --gray3: #dbdbdb;
+  --gray4: '#B0B0B0';
+  --gray5: #878787;
+  --gray6: #5a5a5a;
+  --gray7: #393939;
+  --gray8: #202020;
+  --gray9: #121212;
+}
