@@ -1,28 +1,36 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { useLogin } from '@/api/hooks/useUser'; // 로그인 훅 가져오기
-import { useUserStore } from '@/store/useUserStore'; // zustand 스토어 불러오기
+import { useLogin } from '@/api/hooks/useUser'; 
+import { useUserStore } from '@/store/useUserStore'; 
 import Logo from '@/assets/GooimanLogo.svg?react';
 import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
 import ShareButton from '../button/ShareButton';
 import MakeCloudButton from '../button/MakeCloudButton';
 import MakePageButton from '../button/MakePageButton';
+import { useModalStore } from '@/store/useModalStore';
+import CreateMemo from '@/components/modal/CustomModal';
 
 interface Props {
   pageId: string | null;
-  setPageId: (pageId: string) => void; // 페이지 ID를 설정할 함수
+  setPageId: (pageId: string) => void;
 }
 
 const Login = ({ setPageId, pageId }: Props) => {
+  const { showModal } = useModalStore();
+
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { isAuthenticated, login } = useUserStore(); // zustand의 상태 및 login 함수 가져오기
-  const loginMutation = useLogin(); // useLogin 훅 사용
+  const { isAuthenticated, login } = useUserStore(); 
+  const loginMutation = useLogin(); 
 
-  // 컴포넌트가 로드될 때 localStorage에서 로그인 상태 확인
+  const openModal = () => {
+    showModal('create-memo');
+  };
+
+
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     const userName = localStorage.getItem('userName');
@@ -77,9 +85,12 @@ const Login = ({ setPageId, pageId }: Props) => {
       )}
       <ButtonContainer>
         <MakePageButton setPageId={setPageId} />
-        <MakeCloudButton />
+        <StyledButton onClick={openModal}>
+          <MakeCloudButton />
+        </StyledButton>
         <ShareButton />
       </ButtonContainer>
+      <CreateMemo modalId="create-memo" />
     </Container>
   );
 };
@@ -105,6 +116,12 @@ const LoginContainer = styled.div`
   flex-direction: column;
   gap: 10px;
   box-shadow: 0px 0px 5px 0px var(--skyBlue2);
+`;
+
+const StyledButton = styled.button`
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 `;
 
 const ButtonContainer = styled.div`
