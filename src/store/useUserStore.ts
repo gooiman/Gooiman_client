@@ -4,8 +4,11 @@ import { persist } from 'zustand/middleware';
 interface UserState {
   isAuthenticated: boolean;
   token: string | null;
-  login: (token: string) => void;
+  pageId: string | null;
+  name: string | null;
+  login: (token: string, name: string) => void;
   logout: () => void;
+  setPageId: (pageId: string) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -13,20 +16,32 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       isAuthenticated: false,
       token: null,
-      login: (token) => {
+      pageId: null,
+      name: null,
+      login: (token, name) => {
         try {
           localStorage.setItem('authToken', JSON.stringify(token));
-          set({ isAuthenticated: true, token });
+          localStorage.setItem('userName', JSON.stringify(name));
+          set({ isAuthenticated: true, token, name });
         } catch (error) {
-          console.warn('Failed to save the token:', error);
+          console.warn('Failed to save the token and name:', error);
         }
       },
       logout: () => {
         try {
           localStorage.removeItem('authToken');
-          set({ isAuthenticated: false, token: null });
+          localStorage.removeItem('userName');
+          set({ isAuthenticated: false, token: null, pageId: null, name: null });
         } catch (error) {
-          console.warn('Failed to remove the token:', error);
+          console.warn('Failed to remove the token and name:', error);
+        }
+      },
+      setPageId: (pageId: string) => {
+        try {
+          localStorage.setItem('pageId', JSON.stringify(pageId));
+          set({ pageId });
+        } catch (error) {
+          console.warn('Failed to save the pageId:', error);
         }
       },
     }),
@@ -48,14 +63,22 @@ export const useUserStore = create<UserState>()(
   )
 );
 
-const initializeApp = () => {
+// 초기화 함수
+export const initializeApp = () => {
   const token = localStorage.getItem('authToken');
-  if (token) {
-    useUserStore.getState().login(JSON.parse(token)); // JSON 파싱 후 토큰 설정
+  const pageId = localStorage.getItem('pageId');
+  const name = localStorage.getItem('userName');
+
+  if (token && name) {
+    useUserStore.getState().login(JSON.parse(token), JSON.parse(name)); // 토큰과 이름 저장
   } else {
     useUserStore.getState().logout();
   }
+
+  if (pageId) {
+    useUserStore.getState().setPageId(JSON.parse(pageId));
+  }
 };
 
-// Call the initialize function on app load
+// 앱 시작 시 초기화 함수 실행
 initializeApp();
