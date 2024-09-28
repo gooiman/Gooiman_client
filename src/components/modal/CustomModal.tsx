@@ -3,6 +3,8 @@ import { useModalStore } from '@/store/useModalStore';
 import Modal from 'react-modal';
 import Styled from '@emotion/styled';
 import SVGBlueCloud from '@/assets/BlueCloudCreate.svg?react';
+import SVGTrash from '@/assets/Trash.svg?react';
+import AlertModal from './AlertModal';
 
 const colors = ['#82AFFF', '#FF6B6B', '#FFE66D', '#6BFFB3', '#B39CD0'];
 
@@ -17,6 +19,18 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [selectedTopicBlock, setSelectedTopicBlock] = useState<{ color: string; text: string } | null>(null);
   const maxChars = 150;
+  const [showModal, setShowModal] = useState<boolean>(false); // 삭제 ox alert 모달
+
+  // 모달을 띄우기 위한 버튼
+  const openSaveModal = () => {
+    setShowModal(true);
+  };
+
+  // 저장 완료시 로직
+  const onSaveSuccess = () => {
+    setShowModal(false);
+    closeModal(modalId);
+  };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
@@ -48,6 +62,7 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
     >
       <ModalContent>
         <TitleInput type="text" placeholder="새 메모 제목" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <SVGTrash onClick={closeCreateModal} />
         <Underline />
 
         <TopicContainer>
@@ -90,8 +105,11 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
             {charCount}/{maxChars}자
           </CharCounter>
         </InputContainer>
-        <ButtonContainer onClick={closeCreateModal}>Save</ButtonContainer>
+        <ButtonContainer onClick={openSaveModal}>Save</ButtonContainer>
       </ModalContent>
+
+      {/* Alert 모달 */}
+      <AlertModal isOpen={showModal} title="이 메모장을" message="삭제하시겠습니까?" onSuccess={onSaveSuccess} />
     </SidebarModal>
   );
 };
