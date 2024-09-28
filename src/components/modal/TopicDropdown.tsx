@@ -1,51 +1,55 @@
+import { TopicState } from '@/types/memo';
 import Styled from '@emotion/styled';
 
 interface TopicDropdownProps {
-  mainTopic: string;
-  setMainTopic: (value: string) => void;
-  selectedColor: string;
-  setSelectedColor: (value: string) => void;
+  topicState: TopicState;
+  setTopicState: (value: React.SetStateAction<TopicState>) => void;
   handleAddTopic: () => void;
   colors: string[];
+  isMainTopic?: boolean;
 }
 
-const TopicDropdown = ({
-  mainTopic,
-  setMainTopic,
-  selectedColor,
-  setSelectedColor,
-  handleAddTopic,
-  colors,
-}: TopicDropdownProps) => {
+const TopicDropdown = ({ topicState, setTopicState, handleAddTopic, colors, isMainTopic }: TopicDropdownProps) => {
+  const { mainTopic } = topicState;
+
   return (
-    <DropdownMenu>
+    <DropdownMenu isMainTopic={isMainTopic}>
       <TopicInput
         type="text"
-        placeholder="주제 입력"
+        placeholder={isMainTopic ? '대주제 입력' : '소주제 입력'}
         value={mainTopic}
-        onChange={(e) => setMainTopic(e.target.value)}
+        onChange={(e) => setTopicState((prevState) => ({ ...prevState, mainTopic: e.target.value }))}
       />
-      <ColorSelectContainer>
-        {colors.map((color, index) => (
-          <ColorOption key={index} onClick={() => setSelectedColor(color)} selected={selectedColor === color}>
-            <ColorCircle color={color} />
-          </ColorOption>
-        ))}
-      </ColorSelectContainer>
-      <AddTopicButton onClick={handleAddTopic}>완료</AddTopicButton>
+      {!isMainTopic && (
+        <ColorSelectContainer>
+          {colors.map((color, index) => (
+            <ColorOption
+              key={index}
+              onClick={() => setTopicState((prevState) => ({ ...prevState, selectedColor: color }))}
+              selected={topicState.selectedColor === color}
+            >
+              <ColorCircle color={color} />
+            </ColorOption>
+          ))}
+        </ColorSelectContainer>
+      )}
+      <AddTopicButton isMainTopic={isMainTopic} onClick={handleAddTopic}>
+        완료
+      </AddTopicButton>
     </DropdownMenu>
   );
 };
 
 export default TopicDropdown;
 
-// 스타일링 코드 그대로 유지
-const DropdownMenu = Styled.div`
+// 스타일 정의
+const DropdownMenu = Styled.div<{ isMainTopic?: boolean }>`
   display: flex;
   flex-direction: column;
+  padding: 10px;
   gap: 16px;
   align-items: center;
-  padding: 10px;
+  padding: ${({ isMainTopic }) => (isMainTopic ? '10px 0' : '10px')};
   background-color: #f9f9f9;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -57,6 +61,7 @@ const DropdownMenu = Styled.div`
 
 const TopicInput = Styled.input`
   font-size: 1.2rem;
+  margin: 8px;
   padding: 8px;
   border: 1px solid #82AFFF;
   border-radius: 5px;
@@ -91,8 +96,8 @@ const ColorCircle = Styled.div<{ color: string }>`
   background-color: ${(props) => props.color};
 `;
 
-const AddTopicButton = Styled.button`
-  padding: 8px 16px;
+const AddTopicButton = Styled.button<{ isMainTopic?: boolean }>`
+  padding: ${({ isMainTopic }) => (isMainTopic ? '6px 12px' : '8px 16px')};
   background-color: #82AFFF;
   border: none;
   border-radius: 5px;
@@ -100,7 +105,7 @@ const AddTopicButton = Styled.button`
   cursor: pointer;
 
   @media (max-width: 768px) {
-    padding: 6px 12px;
+    padding: ${({ isMainTopic }) => (isMainTopic ? '5px 10px' : '6px 12px')};
     font-size: 0.9rem;
   }
 `;

@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import Styled from '@emotion/styled';
 import SVGBlueCloud from '@/assets/BlueCloudCreate.svg?react';
 import SVGTrash from '@/assets/Trash.svg?react';
+import SVGPencil from '@/assets/Pencil.svg?react';
 import AlertModal from '@/components/modal/AlertModal';
 import TopicDropdown from '@/components/modal/TopicDropdown';
 import MemoInput from '@/components/modal/MemoInput';
@@ -11,33 +12,49 @@ import MemoInput from '@/components/modal/MemoInput';
 const colors = ['#82AFFF', '#FF6B6B', '#FFE66D', '#6BFFB3', '#B39CD0'];
 const maxChars = 150;
 
-const CreateMemo = ({ modalId }: { modalId: string }) => {
+interface CreateMemoProps {
+  modalId: string;
+}
+interface TopicState {
+  mainTopic: string;
+  selectedColor: string;
+  showDropdown: boolean;
+  selectedTopicBlock: { color: string; text: string } | null;
+}
+
+const CreateMemo = ({ modalId }: CreateMemoProps) => {
   const { modals, closeModal } = useModalStore();
+
+  // 대주제와 소주제 상태 관리
+  const [mainTopicState, setMainTopicState] = useState<TopicState>({
+    mainTopic: '',
+    selectedColor: colors[0],
+    selectedTopicBlock: null,
+    showDropdown: false,
+  });
+
+  const [subTopicState, setSubTopicState] = useState<TopicState>({
+    mainTopic: '',
+    selectedColor: colors[0],
+    selectedTopicBlock: null,
+    showDropdown: false,
+  });
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [charCount, setCharCount] = useState(0);
-  const [mainTopic, setMainTopic] = useState<string>('');
-  const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const [selectedTopicBlock, setSelectedTopicBlock] = useState<{ color: string; text: string } | null>(null);
-  const [showDeleteAlert, setDeleteAlert] = useState<boolean>(false); // 삭제 모달 on/off
-  const [showSaveAlert, setShowSaveAlert] = useState<boolean>(false); // 저장 완료 모달 on/off
+  const [showDeleteAlert, setDeleteAlert] = useState<boolean>(false);
+  const [showSaveAlert, setShowSaveAlert] = useState<boolean>(false);
 
   // 저장 완료시 로직
   const onSaveSuccess = () => {
     closeModal(modalId);
+    setShowSaveAlert(false);
   };
 
   // 삭제 완료 시 로직
   const onDeleteSuccess = () => {
     setDeleteAlert(false);
-    closeModal(modalId);
-  };
-
-  // 사이드바 닫기 완료 클릭 시 로직
-  const closeSidebarSuccess = () => {
-    setShowSaveAlert(false);
     closeModal(modalId);
   };
 
@@ -49,12 +66,42 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
     }
   };
 
-  const handleAddTopic = () => {
-    if (mainTopic.trim() !== '') {
-      setSelectedTopicBlock({ color: selectedColor, text: mainTopic });
-      setShowDropdown(false);
-      setMainTopic('');
+  const handleAddMainTopic = () => {
+    if (mainTopicState.mainTopic.trim() !== '') {
+      setMainTopicState({
+        ...mainTopicState,
+        selectedTopicBlock: { color: mainTopicState.selectedColor, text: mainTopicState.mainTopic },
+        showDropdown: false,
+        mainTopic: '',
+      });
     }
+  };
+
+  const handleAddSubTopic = () => {
+    if (subTopicState.mainTopic.trim() !== '') {
+      setSubTopicState({
+        ...subTopicState,
+        selectedTopicBlock: { color: subTopicState.selectedColor, text: subTopicState.mainTopic },
+        showDropdown: false,
+        mainTopic: '',
+      });
+    }
+  };
+
+  const toggleMainDropdown = () => {
+    setMainTopicState({ ...mainTopicState, showDropdown: !mainTopicState.showDropdown });
+  };
+
+  const toggleSubDropdown = () => {
+    setSubTopicState({ ...subTopicState, showDropdown: !subTopicState.showDropdown });
+  };
+
+  const removeMainTopicBlock = () => {
+    setMainTopicState({ ...mainTopicState, selectedTopicBlock: null });
+  };
+
+  const removeSubTopicBlock = () => {
+    setSubTopicState({ ...subTopicState, selectedTopicBlock: null });
   };
 
   return (
@@ -72,27 +119,48 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
         </HeaderContainer>
         <Underline />
 
+        {/* 대주제 선택 */}
         <TopicContainer>
           <SVGBlueCloud />
           <TextTitle>대주제</TextTitle>
-          {selectedTopicBlock ? (
-            <TopicBlock color={selectedTopicBlock.color}>
-              {selectedTopicBlock.text}
-              <RemoveButton onClick={() => setSelectedTopicBlock(null)}>X</RemoveButton>
+          {mainTopicState.selectedTopicBlock ? (
+            <TopicBlock>
+              {mainTopicState.selectedTopicBlock.text}
+              <RemoveButton onClick={removeMainTopicBlock}>X</RemoveButton>
             </TopicBlock>
           ) : (
-            <TextWrapper onClick={() => setShowDropdown(!showDropdown)}>+</TextWrapper>
+            <TextWrapper onClick={toggleMainDropdown}>+</TextWrapper>
           )}
-
-          {/* 드롭다운 메뉴 */}
-          {showDropdown && (
+          {mainTopicState.showDropdown && (
             <TopicDropdown
-              mainTopic={mainTopic}
-              setMainTopic={setMainTopic}
-              selectedColor={selectedColor}
-              setSelectedColor={setSelectedColor}
-              handleAddTopic={handleAddTopic}
+              topicState={mainTopicState}
+              setTopicState={setMainTopicState}
+              colors={[]}
+              handleAddTopic={handleAddMainTopic}
+              isMainTopic={true}
+            />
+          )}
+        </TopicContainer>
+
+        {/* 소주제 선택 */}
+        <TopicContainer>
+          <SVGPencil />
+          <TextTitleSecond>소주제</TextTitleSecond>
+          {subTopicState.selectedTopicBlock ? (
+            <TopicBlock color={subTopicState.selectedTopicBlock.color}>
+              <BlockColor color={subTopicState.selectedTopicBlock.color} />
+              {subTopicState.selectedTopicBlock.text}
+              <RemoveButton onClick={removeSubTopicBlock}>X</RemoveButton>
+            </TopicBlock>
+          ) : (
+            <TextWrapper onClick={toggleSubDropdown}>+</TextWrapper>
+          )}
+          {subTopicState.showDropdown && (
+            <TopicDropdown
+              topicState={subTopicState}
+              setTopicState={setSubTopicState}
               colors={colors}
+              handleAddTopic={handleAddSubTopic}
             />
           )}
         </TopicContainer>
@@ -110,18 +178,18 @@ const CreateMemo = ({ modalId }: { modalId: string }) => {
         onClose={() => setDeleteAlert(false)}
         onSuccess={onDeleteSuccess}
       />
-      {/* 저장 on/ox 에러 처리 */}
       <AlertModal
         isOpen={showSaveAlert}
         title="저장되지 않았습니다!"
         message="이대로 종료하시겠습니까?"
         onClose={() => setShowSaveAlert(false)}
-        onSuccess={closeSidebarSuccess}
+        onSuccess={onSaveSuccess}
       />
     </SidebarModal>
   );
 };
 
+// 스타일 정의는 기존과 동일합니다
 const SidebarModal = Styled(Modal)`
   &.ReactModal__Overlay {
     display: flex;
@@ -145,6 +213,7 @@ const SidebarModal = Styled(Modal)`
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     transform: translateX(100%);
     transition: transform 300ms ease-in-out;
+    border-radius: 25px 0px 0px 25px;
 
     @media (max-width: 768px) {
       min-width: 90dvw;
@@ -206,12 +275,22 @@ const TopicContainer = Styled.div`
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  position: relative; 
+  position: relative;
 `;
 
 const TextTitle = Styled.div`
   font-size: 1.5rem;
   color: #4d4d4d;
+  padding-right: 12px;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+`;
+const TextTitleSecond = Styled.div`
+  font-size: 1.5rem;
+  color: #4d4d4d;
+  margin-left: -10px;
   padding-right: 12px;
 
   @media (max-width: 768px) {
@@ -229,19 +308,27 @@ const TextWrapper = Styled.div`
   }
 `;
 
-const TopicBlock = Styled.div<{ color: string }>`
-  background-color: ${(props) => props.color};
+const TopicBlock = Styled.div`
+  background-color: var(--skyBlue3);
   padding: 8px 12px;
   border-radius: 5px;
-  color: #fff;
+  color: #000;
   display: flex;
   align-items: center;
+`;
+
+const BlockColor = Styled.div<{ color: string }>`
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background-color: ${(props) => props.color};
+  margin-right: 24px;
 `;
 
 const RemoveButton = Styled.button`
   background: none;
   border: none;
-  color: white;
+  color: #000;
   font-size: 1.2rem;
   margin-left: 8px;
   cursor: pointer;

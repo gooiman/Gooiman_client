@@ -23,7 +23,7 @@ export default MemoInput;
 const InputContainer = Styled.div`
   flex: 1;
   display: flex;
-  margin-top: 45px;
+  margin-top: 30px;
   flex-direction: column;
   position: relative;
   padding: 0 0 12px;
