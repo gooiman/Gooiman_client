@@ -5,10 +5,13 @@ import SVGSidebarClosed from '../assets/SidebarClosed.svg?react';
 import Sidebar from '@/components/Sidebar';
 import { useModalStore } from '@/store/useModalStore';
 import CreateMemo from '@/components/modal/CustomModal';
+import Login from '@/components/main/login/Login';
+import CloudArea from '@/components/main/CloudArea';
 
 const Main = () => {
   const { showModal } = useModalStore();
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [pageId, setPageId] = useState<string | null>(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -18,23 +21,25 @@ const Main = () => {
   const openModal = () => {
     showModal('create-memo');
   };
-  
+
   return (
     <>
       <SidebarContainer>
         <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
       </SidebarContainer>
       <MainContainer isSidebarOpen={isSidebarOpen}>
-          <StyledButton onClick={openModal}>Open Modal</StyledButton>
+        <StyledButton onClick={openModal}>Open Modal</StyledButton>
         <SVGSideMenuContainer isSidebarOpen={isSidebarOpen} onClick={toggleSidebar}>
           <SVGSidebarClosed style={{ width: '25px', height: '25px', transform: 'scale(-1, 1)', cursor: 'pointer' }} />
         </SVGSideMenuContainer>
-        <Content></Content>
-              {/* // create memo modal */}
-      <CreateMemo modalId="create-memo" />
+        <Content>
+          <CloudArea pageId={pageId} />
+        </Content>
+        <Login pageId={pageId} setPageId={setPageId} />
+        {/* // create memo modal */}
+        <CreateMemo modalId="create-memo" />
       </MainContainer>
     </>
-
   );
 };
 
@@ -43,8 +48,8 @@ const MainContainer = styled.div<{ isSidebarOpen: boolean }>`
   padding: 20px;
   margin-left: ${(props) => (props.isSidebarOpen ? '190px' : '0')};
   transition: margin-left 0.3s ease;
+  height: 100vh;
 `;
-
 
 const StyledButton = styled.button`
   position: absolute;
@@ -52,7 +57,6 @@ const StyledButton = styled.button`
   height: 40px;
   cursor: pointer;
 `;
-
 
 const SVGSideMenuContainer = styled.div<{ isSidebarOpen: boolean }>`
   display: flex;
@@ -63,6 +67,9 @@ const SVGSideMenuContainer = styled.div<{ isSidebarOpen: boolean }>`
 
 const SidebarContainer = styled.div``;
 
-const Content = styled.div``;
+const Content = styled.div`
+  position: relative;
+  margin: 0 auto;
+`;
 
 export default Main;
