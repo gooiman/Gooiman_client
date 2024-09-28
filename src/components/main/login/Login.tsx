@@ -51,7 +51,7 @@ const Login = ({ setPageId, pageId }: Props) => {
       <ButtonContainer>
         <MakePageButton setPageId={setPageId} />
         <MakeCloudButton />
-        <ShareButton />
+        <ShareButton pageId={pageId} />
       </ButtonContainer>
     </Container>
   );

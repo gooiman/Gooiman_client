@@ -1,7 +1,11 @@
 import ShareIcon from '@/assets/ShareIcon.svg?react';
 import styled from '@emotion/styled';
 
-const ShareButton = () => {
+interface Props {
+  pageId: string | null;
+}
+
+const ShareButton = ({ pageId }: Props) => {
   const handleShare = () => {
     //링크 공유 로직
   };
@@ -17,7 +21,7 @@ const ShareButton = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60px;
+  width: 50px;
   cursor: pointer;
 `;
 

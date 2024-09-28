@@ -8,7 +8,7 @@ interface Props {
 
 const MakePageButton = ({ setPageId }: Props) => {
   const handleMakePage = () => {
-    const newPageId = uuidv4(); // UUID를 사용해 새로운 페이지 ID 생성
+    const newPageId = 'new page';
     setPageId(newPageId); // 페이지 ID를 부모 컴포넌트로 전달
   };
 
@@ -23,7 +23,7 @@ const MakePageButton = ({ setPageId }: Props) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60px;
+  width: 50px;
   cursor: pointer;
 `;
 
