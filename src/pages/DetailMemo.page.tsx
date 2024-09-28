@@ -14,6 +14,8 @@ const DetailMemo = () => {
       category: 'category1',
       sub_category: 'subCategory1',
       color: '#8bc34a',
+      x: Math.random() * 500,
+      y: Math.random() * 500,
     },
     {
       id: 2,
@@ -23,6 +25,8 @@ const DetailMemo = () => {
       category: 'category1',
       sub_category: 'subCategory2',
       color: '#8bc34a',
+      x: Math.random() * 500,
+      y: Math.random() * 500,
     },
     {
       id: 3,
@@ -32,21 +36,10 @@ const DetailMemo = () => {
       category: 'category1',
       sub_category: 'subCategory3',
       color: '#8bc34a',
+      x: Math.random() * 500,
+      y: Math.random() * 500,
     },
   ]);
-
-  const randMemoPos = (data) => {
-    return data.map((memo) => ({
-      ...memo,
-      x: Math.random() * 50 * memo.sub_category.length, // 초기 x 위치
-      y: Math.random() * 50 * memo.sub_category.length, // 초기 y 위치
-    }));
-  };
-
-  useEffect(() => {
-    // 데이터를 받아온 후
-    // 받아온 데이터를 randMemoPos 함수에 넣어 memoPositions 상태 업데이트
-  }, []);
 
   const bindMemoPos = (id: number) =>
     useDrag((state) => {

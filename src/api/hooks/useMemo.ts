@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import apiClient from '../client';
 import { API_ENDPOINTS } from '../endpoints';
 
@@ -20,5 +20,20 @@ const updateMemo = async (memoData: MemoData) => {
 export const useCreateMemo = () => {
   return useMutation({
     mutationFn: (memoData: MemoData) => updateMemo(memoData),
+  });
+};
+
+const getMemoList = async (pageId: string, category: string) => {
+  const { data } = await apiClient.get(
+    API_ENDPOINTS.MEMO.MEMO_CATEGORIES.replace(':pageId', pageId).replace(':category', category)
+  );
+  return data.data;
+};
+
+export const useMemoList = (pageId: string, category: string) => {
+  return useQuery({
+    queryKey: ['pageInfo', pageId, category],
+    queryFn: () => getMemoList(pageId, category),
+    enabled: !!pageId && !!category,
   });
 };
