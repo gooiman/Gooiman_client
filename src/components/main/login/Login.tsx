@@ -12,7 +12,7 @@ interface Props {
   setPageId: (pageId: string) => void; // 페이지 ID를 설정할 함수
 }
 
-const Login: React.FC<Props> = ({ setPageId, pageId }) => {
+const Login = ({ setPageId, pageId }: Props) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,8 +58,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 25%;
-  max-width: 400px;
-  min-width: 300px;
+  max-width: 30rem;
+  min-width: 12rem;
   margin-left: auto;
   right: 0px;
   top: 0;

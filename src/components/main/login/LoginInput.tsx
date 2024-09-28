@@ -6,7 +6,7 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const LoginInput: React.FC<Props> = ({ text, value, onChange }) => {
+const LoginInput = ({ text, value, onChange }: Props) => {
   return (
     <Container>
       <Label>{text}</Label>
@@ -24,7 +24,7 @@ const Container = styled.div`
 `;
 
 const Label = styled.p`
-  font-size: 16px;
+  font-size: 0.9rem;
   font-family: 'PressStart2P', sans-serif;
   color: var(--gray5);
   margin: 0;
@@ -38,8 +38,8 @@ const InputContainer = styled.input`
   border-radius: 5px;
   background-color: var(--skyBlue3);
   width: 100%;
-  height: 35px;
-  flex: 2;
+  height: 2rem;
+  flex: 1.8;
   &:focus {
     outline: none;
   }

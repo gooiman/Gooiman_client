@@ -4,7 +4,7 @@ interface Props {
   pageId: string | null;
 }
 
-const CloudArea: React.FC<Props> = ({ pageId }) => {
+const CloudArea = ({ pageId }: Props) => {
   return <Container>{pageId ? <>새 페이지 생성 완료</> : <>페이지가 없습니다</>}</Container>;
 };
 

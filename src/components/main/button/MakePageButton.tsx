@@ -6,7 +6,7 @@ interface Props {
   setPageId: (pageId: string) => void; // 생성된 페이지 ID를 부모에게 전달할 수 있는 함수
 }
 
-const MakePageButton: React.FC<Props> = ({ setPageId }) => {
+const MakePageButton = ({ setPageId }: Props) => {
   const handleMakePage = () => {
     const newPageId = uuidv4(); // UUID를 사용해 새로운 페이지 ID 생성
     setPageId(newPageId); // 페이지 ID를 부모 컴포넌트로 전달

@@ -4,7 +4,7 @@ interface Props {
   onClick: () => void;
 }
 
-const LoginButton: React.FC<Props> = ({ onClick }) => {
+const LoginButton = ({ onClick }: Props) => {
   return <ButtonContainer onClick={onClick}>login</ButtonContainer>;
 };
 
