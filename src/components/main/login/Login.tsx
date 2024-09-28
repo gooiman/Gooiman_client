@@ -6,6 +6,7 @@ import LoginInput from './LoginInput';
 import ShareButton from '../button/ShareButton';
 import MakeCloudButton from '../button/MakeCloudButton';
 import MakePageButton from '../button/MakePageButton';
+import BlueCloud from '@/assets/BlueCloud.svg';
 
 interface Props {
   pageId: string | null;
@@ -35,6 +36,8 @@ const Login = ({ setPageId, pageId }: Props) => {
 
   return (
     <Container>
+      <BlueCloudIcon src={BlueCloud} alt="icon" />
+      <BigBlueCloudIcon src={BlueCloud} alt="icon" />
       <Logo style={{ width: '100%' }} />
       {isLoggedIn ? (
         <LoginComplete />
@@ -104,6 +107,19 @@ const Auth = styled.p`
   span {
     color: var(--skyBlue1); /* 원하는 색상으로 변경 */
   }
+`;
+
+const BlueCloudIcon = styled.img`
+  width: 80px;
+  position: absolute;
+  top: 40px;
+  left: -30px;
+`;
+const BigBlueCloudIcon = styled.img`
+  width: 100px;
+  position: absolute;
+  top: -10px;
+  left: -90px;
 `;
 
 export default Login;
