@@ -1,6 +1,6 @@
 import axios from 'axios';
 const apiUrl = import.meta.env.VITE_API;
-console.log('API URL:', apiUrl); // 이 줄을 추가하여 URL을 확인
+console.log('API URL:', apiUrl);
 
 import { useUserStore } from '@/store/useUserStore';
 
@@ -20,7 +20,7 @@ apiClient.interceptors.request.use(
   async (config) => {
     const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = token;
     }
     return config;
   },
