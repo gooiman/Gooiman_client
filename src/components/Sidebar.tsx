@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import SVGBlueCloud from '../assets/BlueCloud.svg?react';
@@ -18,6 +19,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onToggle, data }: SidebarProps) => {
   const [menuStates, setMenuStates] = useState<boolean[]>([]);
+  const navigate = useNavigate();
   const categories = Object.keys(data);
 
   useEffect(() => {
@@ -51,7 +53,13 @@ const Sidebar = ({ isOpen, onToggle, data }: SidebarProps) => {
             <SubMenu isSubMenuOpen={menuStates[index]}>
               {Object.keys(data[category]).map((subCategory) =>
                 data[category][subCategory].map((item) => (
-                  <SubMenuItem key={item}>
+                  <SubMenuItem
+                    key={item}
+                    onClick={() => {
+                      // category 값을 쿼리 파라미터로 추가
+                      navigate(`/detail-memo?category=${encodeURIComponent(category)}`);
+                    }}
+                  >
                     <SVGSunContainer>
                       <SVGSun />
                     </SVGSunContainer>

@@ -5,10 +5,12 @@ import SVGSidebarClosed from '../assets/SidebarClosed.svg?react';
 import { useModalStore } from '@/store/useModalStore';
 import CreateMemo from '@/components/modal/CustomModal';
 import Login from '@/components/main/login/Login';
+import Sidebar from '@/components/Sidebar';
 import CloudArea from '@/components/main/CloudArea';
 import { useUpdatePages } from '@/api/hooks/useUser';
 import { useUserStore } from '@/store/useUserStore';
 import { usePageInfo } from '@/api/hooks/usePages';
+
 const Main = () => {
   const { showModal } = useModalStore();
   const { pageId, setPageId } = useUserStore();
@@ -45,9 +47,13 @@ const Main = () => {
 
   return (
     <>
-      <SidebarContainer>{/* 사이드바 데이터가 있을 때 추가 */}</SidebarContainer>
+      <SidebarContainer>
+        {data && data.data && data.data.memo_summaries && (
+          <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} data={data.data.memo_summaries} />
+        )}
+      </SidebarContainer>
       <MainContainer isSidebarOpen={isSidebarOpen}>
-        <StyledButton onClick={openModal}>Open Modal</StyledButton>
+        {' '}
         <SVGSideMenuContainer isSidebarOpen={isSidebarOpen} onClick={toggleSidebar}>
           <SVGSidebarClosed style={{ width: '25px', height: '25px', transform: 'scale(-1, 1)', cursor: 'pointer' }} />
         </SVGSideMenuContainer>
@@ -65,16 +71,7 @@ const Main = () => {
 const MainContainer = styled.div<{ isSidebarOpen: boolean }>`
   display: flex;
   padding: 20px;
-  margin-left: ${(props) => (props.isSidebarOpen ? '190px' : '0')};
-  transition: margin-left 0.3s ease;
   height: 100vh;
-`;
-
-const StyledButton = styled.button`
-  position: absolute;
-  bottom: 20px;
-  height: 40px;
-  cursor: pointer;
 `;
 
 const SVGSideMenuContainer = styled.div<{ isSidebarOpen: boolean }>`
