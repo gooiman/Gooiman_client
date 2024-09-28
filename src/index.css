@@ -1,4 +1,16 @@
+@font-face {
+  font-family: 'BMHANNA';
+  src: url('../public/assets/fonts/BMHANNA_11yrs_ttf.ttf');
+}
+
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('../public/assets/fonts/PressStart2P-Regular.ttf');
+}
+
 body {
   margin: 0;
   padding: 0;
+  background-color: #ecf3ff;
+  font-family: 'BMHANNA';
 }
