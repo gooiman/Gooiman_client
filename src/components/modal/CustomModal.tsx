@@ -11,6 +11,7 @@ import MemoInput from '@/components/modal/MemoInput';
 import { useCreateMemo } from '@/api/hooks/useMemo';
 import { useUserStore } from '@/store/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
+import { json } from 'stream/consumers';
 
 const colors = ['#82AFFF', '#FF6B6B', '#FFE66D', '#6BFFB3', '#B39CD0'];
 const maxChars = 150;

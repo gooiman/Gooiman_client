@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { useLogin } from '@/api/hooks/useUser'; 
-import { useUserStore } from '@/store/useUserStore'; 
+import { useLogin } from '@/api/hooks/useUser';
+import { useUserStore } from '@/store/useUserStore';
 import Logo from '@/assets/GooimanLogo.svg?react';
 import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
@@ -23,13 +23,12 @@ const Login = ({ setPageId, pageId }: Props) => {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { isAuthenticated, login } = useUserStore(); 
-  const loginMutation = useLogin(); 
+  const {isAuthenticated, login } = useUserStore();
+  const loginMutation = useLogin();
 
   const openModal = () => {
     showModal('create-memo');
   };
-
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
@@ -45,15 +44,15 @@ const Login = ({ setPageId, pageId }: Props) => {
       console.warn('Page ID is missing.');
       return;
     }
-
-    // 로그인 요청 보내기
+    console.log('pageId', pageId);
     loginMutation.mutate(
       { pageId, name, password },
       {
         onSuccess: (data) => {
+          console.log('Login success:', data);
           if (data) {
-            login(data.token, name); // zustand에 토큰과 이름 저장
-            setIsLoggedIn(true); // 로그인 성공 시 UI 상태 변경
+            login(data.token, name);
+            setIsLoggedIn(true);
           }
         },
       }
