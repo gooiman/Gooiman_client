@@ -85,6 +85,7 @@ const SidebarContainer = styled.div``;
 
 const Content = styled.div`
   position: relative;
+  width: 80%;
   margin: 0 auto;
 `;
 

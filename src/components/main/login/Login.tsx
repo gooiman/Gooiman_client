@@ -7,7 +7,6 @@ import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
 import ShareButton from '../button/ShareButton';
 import MakeCloudButton from '../button/MakeCloudButton';
-import MakePageButton from '../button/MakePageButton';
 import BlueCloud from '@/assets/BlueCloud.svg';
 import { useModalStore } from '@/store/useModalStore';
 import CreateMemo from '@/components/modal/CustomModal';
@@ -86,7 +85,6 @@ const Login = ({ setPageId, pageId }: Props) => {
         </LoginContainer>
       )}
       <ButtonContainer>
-        <MakePageButton setPageId={setPageId} />
         <StyledButton onClick={openModal}>
           <MakeCloudButton />
         </StyledButton>

@@ -7,7 +7,7 @@ interface Props {
 
 const ShareButton = ({ pageId }: Props) => {
   const handleShare = () => {
-    //링크 공유 로직
+    // 링크 공유 로직
   };
 
   return (
