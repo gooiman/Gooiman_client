@@ -10,9 +10,11 @@ const CloudArea: React.FC<Props> = ({ pageId }) => {
 
 const Container = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
-  margin: 0 auto;
   font-size: 40px;
   color: var(--skyBlue1);
+  justify-content: center;
+  height: 100%;
 `;
 export default CloudArea;

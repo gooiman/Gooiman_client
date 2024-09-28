@@ -60,9 +60,11 @@ const Container = styled.div`
   width: 25%;
   max-width: 400px;
   min-width: 300px;
-  position: absolute;
+  margin-left: auto;
   right: 0px;
+  top: 0;
   margin: 30px;
+  position: absolute;
 `;
 
 const LoginContainer = styled.div`
