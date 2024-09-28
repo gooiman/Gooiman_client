@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import Logo from '@/assets/GooimanLogo.svg?react';
-import LoginButton from './components/LoginButton';
-import LoginInput from './components/LoginInput';
+import LoginButton from './LoginButton';
+import LoginInput from './LoginInput';
 import ShareButton from '../button/ShareButton';
 import MakeCloudButton from '../button/MakeCloudButton';
 import MakePageButton from '../button/MakePageButton';
