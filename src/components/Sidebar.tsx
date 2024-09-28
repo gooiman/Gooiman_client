@@ -4,13 +4,18 @@ import styled from '@emotion/styled';
 import SVGBlueCloud from '../assets/BlueCloud.svg?react';
 import SVGMenuClosed from '../assets/MenuClosed.svg?react';
 import SVGMenuOpened from '../assets/MenuOpened.svg?react';
+import SVGSidebarClosed from '../assets/SidebarClosed.svg?react';
 import SVGSun from '../assets/Sun.svg?react';
 
 interface SubMenuProps {
+  isSubMenuOpen: boolean;
+}
+interface SidebarProps {
   isOpen: boolean;
+  onToggle: () => void;
 }
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
   const [menuStates, setMenuStates] = useState(Array(8).fill(false));
 
   const toggleMenu = (index: number) => {
@@ -22,7 +27,10 @@ const Sidebar = () => {
   };
 
   return (
-    <SidebarContainer>
+    <SidebarContainer isOpen={isOpen}>
+      <SVGSideMenuContainer onClick={onToggle}>
+        <SVGSidebarClosed style={{ width: '25px', height: '25px' }} />
+      </SVGSideMenuContainer>
       <SVGBlueCloudContainer>
         <SVGBlueCloud style={{ width: '50px', height: '50px' }} />
       </SVGBlueCloudContainer>
@@ -31,7 +39,7 @@ const Sidebar = () => {
         <MenuItem onClick={() => toggleMenu(0)}>
           {menuStates[0] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>기획</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[0]}>
+        <SubMenu isSubMenuOpen={menuStates[0]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -61,7 +69,7 @@ const Sidebar = () => {
           {menuStates[1] ? <SVGMenuOpened /> : <SVGMenuClosed />}
           <MenuItemText>프론트엔드</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[1]}>
+        <SubMenu isSubMenuOpen={menuStates[1]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -91,7 +99,7 @@ const Sidebar = () => {
           {menuStates[2] ? <SVGMenuOpened /> : <SVGMenuClosed />}
           <MenuItemText>디자인</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[2]}>
+        <SubMenu isSubMenuOpen={menuStates[2]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -121,7 +129,7 @@ const Sidebar = () => {
           {menuStates[3] ? <SVGMenuOpened /> : <SVGMenuClosed />}
           <MenuItemText>백엔드</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[3]}>
+        <SubMenu isSubMenuOpen={menuStates[3]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -154,7 +162,7 @@ const Sidebar = () => {
         <MenuItem onClick={() => toggleMenu(4)}>
           {menuStates[4] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>기획</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[4]}>
+        <SubMenu isSubMenuOpen={menuStates[4]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -183,7 +191,7 @@ const Sidebar = () => {
         <MenuItem onClick={() => toggleMenu(5)}>
           {menuStates[5] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>프론트엔드</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[5]}>
+        <SubMenu isSubMenuOpen={menuStates[5]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -212,7 +220,7 @@ const Sidebar = () => {
         <MenuItem onClick={() => toggleMenu(6)}>
           {menuStates[6] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>디자인</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[6]}>
+        <SubMenu isSubMenuOpen={menuStates[6]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -241,7 +249,7 @@ const Sidebar = () => {
         <MenuItem onClick={() => toggleMenu(7)}>
           {menuStates[7] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>백엔드</MenuItemText>
         </MenuItem>
-        <SubMenu isOpen={menuStates[7]}>
+        <SubMenu isSubMenuOpen={menuStates[7]}>
           <SubMenuItem>
             <SVGSunContainer>
               <SVGSun />
@@ -272,11 +280,21 @@ const Sidebar = () => {
   );
 };
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.div<{ isOpen: boolean }>`
+  z-index: 100;
   width: 150px;
   min-height: 100dvh;
   padding: 20px;
   background-color: #fff;
+  position: absolute;
+  left: 0;
+  transition: transform 0.3s ease;
+  transform: ${(props) => (props.isOpen ? 'translateX(0)' : 'translateX(-100%)')};
+`;
+
+const SVGSideMenuContainer = styled.div`
+  text-align: right;
+  cursor: pointer;
 `;
 
 const SVGBlueCloudContainer = styled.div`
@@ -311,7 +329,7 @@ const MenuItemText = styled.div`
 
 const SubMenu = styled.div<SubMenuProps>`
   padding-left: 0.5rem;
-  display: ${(props) => (props.isOpen ? 'block' : 'none')};
+  display: ${(props) => (props.isSubMenuOpen ? 'block' : 'none')};
 `;
 
 const SubMenuItem = styled.div`
