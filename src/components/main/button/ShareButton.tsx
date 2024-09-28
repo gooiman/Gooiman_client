@@ -7,7 +7,16 @@ interface Props {
 
 const ShareButton = ({ pageId }: Props) => {
   const handleShare = () => {
-    // 링크 공유 로직
+    const baseUrl = window.location.origin;
+    const inviteLink = `${baseUrl}/${pageId}`;
+    navigator.clipboard
+      .writeText(inviteLink)
+      .then(() => {
+        alert('초대 링크가 복사되었습니다!');
+      })
+      .catch((err) => {
+        console.error('초대 링크 복사에 실패했습니다:', err);
+      });
   };
 
   return (

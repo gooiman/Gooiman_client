@@ -12,6 +12,7 @@ interface RouteElement {
 
 const routes: RouteElement[] = [
   { path: '/', element: <Main /> },
+  { path: '/:pageId', element: <Main /> },
   { path: '/detail-memo', element: <DetailMemo /> },
   { path: '/test', element: <Test /> },
 ];

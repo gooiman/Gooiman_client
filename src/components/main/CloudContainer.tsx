@@ -14,7 +14,7 @@ interface Props {
 
 const CloudContainer = ({ subCategoryCount, totalCount, style, category }: Props) => {
   const maxSize = 500;
-  let cloudSize = 100 + totalCount * 10;
+  let cloudSize = 100 + totalCount * 20;
   if (cloudSize > maxSize) {
     cloudSize = maxSize; // 최대 크기 제한
   }

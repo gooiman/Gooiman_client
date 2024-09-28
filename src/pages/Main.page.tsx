@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 
 import SVGSidebarClosed from '../assets/SidebarClosed.svg?react';
-import { useModalStore } from '@/store/useModalStore';
 import CreateMemo from '@/components/modal/CustomModal';
 import Login from '@/components/main/login/Login';
 import Sidebar from '@/components/Sidebar';
@@ -10,12 +9,14 @@ import CloudArea from '@/components/main/CloudArea';
 import { useUpdatePages } from '@/api/hooks/useUser';
 import { useUserStore } from '@/store/useUserStore';
 import { usePageInfo } from '@/api/hooks/usePages';
+import { useParams } from 'react-router-dom';
+
 
 const Main = () => {
-  const { showModal } = useModalStore();
   const { pageId, setPageId } = useUserStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const { pageId: paramPageId } = useParams<{ pageId: string }>();
 
   const { mutate: updatePage, data: pageInfo, isError } = useUpdatePages();
   const { data, isError: isPageError } = usePageInfo(pageId || '', isAuthenticated);
@@ -25,15 +26,14 @@ const Main = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  const openModal = () => {
-    showModal('create-memo');
-  };
-
   useEffect(() => {
-    if (!pageId) {
+    if (paramPageId) {
+      setPageId(paramPageId);
+    } else if (!pageId) {
+      // paramPageId가 없고, pageId도 없으면 새로운 페이지를 생성
       updatePage();
     }
-  }, [pageId, updatePage]);
+  }, [paramPageId, pageId, updatePage]);
 
   useEffect(() => {
     if (pageInfo && pageInfo.id) {
@@ -53,12 +53,11 @@ const Main = () => {
         )}
       </SidebarContainer>
       <MainContainer isSidebarOpen={isSidebarOpen}>
-        {' '}
         <SVGSideMenuContainer isSidebarOpen={isSidebarOpen} onClick={toggleSidebar}>
           <SVGSidebarClosed style={{ width: '25px', height: '25px', transform: 'scale(-1, 1)', cursor: 'pointer' }} />
         </SVGSideMenuContainer>
         <Content>
-          <CloudArea pageId={pageId} />
+          <CloudArea pageId={pageId} data={data?.data.memo_summaries} />
         </Content>
         <Login pageId={pageId} setPageId={setPageId} />
         {/* // create memo modal */}
