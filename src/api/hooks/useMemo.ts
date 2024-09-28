@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import apiClient from '../client';
+import { API_ENDPOINTS } from '../endpoints';
 
 export interface MemoData {
   page_id: string | null;
@@ -12,7 +13,7 @@ export interface MemoData {
 }
 
 const updateMemo = async (memoData: MemoData) => {
-  const { data } = await apiClient.put('/api/memo', memoData);
+  const { data } = await apiClient.put(API_ENDPOINTS.MEMO.MEMOS, memoData);
   return data;
 };
 

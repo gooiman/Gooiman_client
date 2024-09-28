@@ -18,6 +18,9 @@ const Test = () => {
   if (isError) {
     return <div>Error loading page data</div>; // 에러 발생 시 표시
   }
+  if (!pageId) {
+    return <div>Page ID is missing</div>;
+  }
 
   return (
     <div>

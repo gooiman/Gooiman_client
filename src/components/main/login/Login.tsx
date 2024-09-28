@@ -23,6 +23,7 @@ const Login = ({ setPageId, pageId }: Props) => {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
   const { isAuthenticated, login } = useUserStore();
   const loginMutation = useLogin();
 
@@ -44,15 +45,15 @@ const Login = ({ setPageId, pageId }: Props) => {
       console.warn('Page ID is missing.');
       return;
     }
-
-    // 로그인 요청 보내기
+    console.log('pageId', pageId);
     loginMutation.mutate(
       { pageId, name, password },
       {
         onSuccess: (data) => {
+          console.log('Login success:', data);
           if (data) {
-            login(data.token, name); // zustand에 토큰과 이름 저장
-            setIsLoggedIn(true); // 로그인 성공 시 UI 상태 변경
+            login(data.token, name);
+            setIsLoggedIn(true);
           }
         },
       }
