@@ -9,10 +9,10 @@ const getPageInfo = async (pageId: string) => {
 };
 
 // React Query의 useQuery 훅을 이용해 데이터를 가져옴
-export const usePageInfo = (pageId: string) => {
+export const usePageInfo = (pageId: string, isAuthenticated: boolean) => {
   return useQuery({
     queryKey: ['pageInfo', pageId],
     queryFn: () => getPageInfo(pageId),
-    enabled: !!pageId,
+    enabled: !!pageId && !!isAuthenticated,
   });
 };
