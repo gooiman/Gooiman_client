@@ -1,9 +1,10 @@
 import Styled from '@emotion/styled';
 import Modal from 'react-modal';
+import SunCloud from '@/assets/SunCloud.svg';
 
 interface AlertModalProps {
   title: string;
-  message: string;
+  message?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -16,6 +17,7 @@ const AlertModal = ({ title, message, isOpen, onClose, onSuccess }: AlertModalPr
           <Title>{title}</Title>
           <Title>{message}</Title>
         </TextWrapper>
+        <SunCloudIcon src={SunCloud} alt="icon" />
         <CloseButton onClick={onSuccess}>YES</CloseButton>
       </ModalContent>
     </Modal>
@@ -44,10 +46,10 @@ const ModalStyle = {
 };
 
 const ModalContent = Styled.div`
-  padding: 20px 45px;
+  padding: 20px 40px;
 `;
 const TextWrapper = Styled.div`
-  margin: 57px 0 30px;
+  margin: 30px 0;
 `;
 
 const Title = Styled.div`
@@ -65,4 +67,11 @@ const CloseButton = Styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const SunCloudIcon = Styled.img`
+  position: absolute;
+  bottom: 5px;
+  width: 80px;
+  left: 30px;
 `;

@@ -7,7 +7,7 @@ import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
 import ShareButton from '../button/ShareButton';
 import MakeCloudButton from '../button/MakeCloudButton';
-import MakePageButton from '../button/MakePageButton';
+import BlueCloud from '@/assets/BlueCloud.svg';
 import { useModalStore } from '@/store/useModalStore';
 import CreateMemo from '@/components/modal/CustomModal';
 
@@ -23,7 +23,8 @@ const Login = ({ setPageId, pageId }: Props) => {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const {isAuthenticated, login } = useUserStore();
+
+  const { isAuthenticated, login } = useUserStore();
   const loginMutation = useLogin();
 
   const openModal = () => {
@@ -72,22 +73,23 @@ const Login = ({ setPageId, pageId }: Props) => {
 
   return (
     <Container>
+      <BlueCloudIcon src={BlueCloud} alt="icon" />
+      <BigBlueCloudIcon src={BlueCloud} alt="icon" />
       <Logo style={{ width: '100%' }} />
       {isAuthenticated || isLoggedIn ? ( // zustand의 상태 또는 localStorage에 따라 UI 변경
         <LoginComplete />
       ) : (
         <LoginContainer>
-          <LoginInput text="name" value={name} onChange={(e) => setName(e.target.value)} />
-          <LoginInput text="pw" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <LoginInput text="name" value={name} type="text" font="BMHANNA" onChange={(e) => setName(e.target.value)} />
+          <LoginInput text="pw" value={password} type="password" onChange={(e) => setPassword(e.target.value)} />
           <LoginButton onClick={handleLogin} />
         </LoginContainer>
       )}
       <ButtonContainer>
-        <MakePageButton setPageId={setPageId} />
         <StyledButton onClick={openModal}>
           <MakeCloudButton />
         </StyledButton>
-        <ShareButton />
+        <ShareButton pageId={pageId} />
       </ButtonContainer>
       <CreateMemo modalId="create-memo" />
     </Container>
@@ -150,6 +152,19 @@ const Auth = styled.p`
   span {
     color: var(--skyBlue1);
   }
+`;
+
+const BlueCloudIcon = styled.img`
+  width: 80px;
+  position: absolute;
+  top: 40px;
+  left: -30px;
+`;
+const BigBlueCloudIcon = styled.img`
+  width: 100px;
+  position: absolute;
+  top: -10px;
+  left: -90px;
 `;
 
 export default Login;

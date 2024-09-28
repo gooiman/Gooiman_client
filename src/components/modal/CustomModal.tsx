@@ -216,8 +216,7 @@ const CreateMemo = ({ modalId }: CreateMemoProps) => {
       {/* Alert 모달 */}
       <AlertModal
         isOpen={showDeleteAlert}
-        title="이 메모장을"
-        message="삭제하시겠습니까?"
+        title="이 메모장을 삭제하시겠습니까?"
         onClose={() => setDeleteAlert(false)}
         onSuccess={handleDelete}
       />
