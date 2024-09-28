@@ -3,34 +3,38 @@ import CloudContainer from './CloudContainer';
 
 interface Props {
   pageId: string | null;
-  // data?: { [key: string]: { [key: string]: string[] } };
+  data?: {
+    [key: string]: {
+      [key: string]: string[];
+    };
+  };
 }
 
-const mockData: { [key: string]: { [key: string]: string[] } } = {
-  연합해커톤: {
-    sub_category1: ['제목1', '제목2'],
-    sub_category2: ['제목3', '제목4'],
-    sub_category3: ['제목3', '제목4'],
-    sub_category4: ['제목3', '제목4'],
-  },
-  단풍톤: {
-    sub_category3: ['제목5', '제목6'],
-    sub_category4: ['제목7', '제목8', '9', '10', '11'],
-    sub_category5: ['제목7', '제목8', '9', '10', '11'],
-    sub_category6: ['제목7', '제목8', '9', '10', '11'],
-    sub_category7: ['제목7', '제목8', '9', '10', '11'],
-    sub_category8: ['제목7', '제목8', '9', '10', '11'],
-    sub_category9: ['제목7', '제목8', '9', '10', '11'],
-    sub_category10: ['제목7', '제목8', '9', '10', '11'],
-    sub_category11: ['제목7', '제목8', '9', '10', '11'],
-  },
-  벚꽃톤: {
-    sub_category1: ['제목5', '제목6'],
-  },
-  구름톤: {
-    sub_category1: ['제목5', '제목6'],
-  },
-};
+// const mockData: { [key: string]: { [key: string]: string[] } } = {
+//   연합해커톤: {
+//     sub_category1: ['제목1', '제목2'],
+//     sub_category2: ['제목3', '제목4'],
+//     sub_category3: ['제목3', '제목4'],
+//     sub_category4: ['제목3', '제목4'],
+//   },
+//   단풍톤: {
+//     sub_category3: ['제목5', '제목6'],
+//     sub_category4: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category5: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category6: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category7: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category8: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category9: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category10: ['제목7', '제목8', '9', '10', '11'],
+//     sub_category11: ['제목7', '제목8', '9', '10', '11'],
+//   },
+//   벚꽃톤: {
+//     sub_category1: ['제목5', '제목6'],
+//   },
+//   구름톤: {
+//     sub_category1: ['제목5', '제목6'],
+//   },
+// };
 
 const getRandomPositionWithinRange = (min: number, max: number) => {
   return min + Math.random() * (max - min); // min과 max 사이의 랜덤 값 반환
@@ -54,17 +58,21 @@ const getPosition = (index: number) => {
   };
 };
 
-const CloudArea = ({ pageId }: Props) => {
+const CloudArea = ({ pageId, data }: Props) => {
   if (!pageId) {
     return <Container>페이지가 없습니다.</Container>;
   }
 
-  const categories = Object.keys(mockData);
+  if (!data || Object.keys(data).length === 0) {
+    return <Container>구름을 생성하세요.</Container>;
+  }
+
+  const categories = Object.keys(data);
 
   return (
     <Container>
       {categories.map((category, index) => {
-        const subCategories = Object.values(mockData[category]);
+        const subCategories = Object.values(data[category]);
         const totalCount = subCategories.reduce((sum, currentArray) => sum + currentArray.length, 0);
         const { top, left } = getPosition(index);
         return (
