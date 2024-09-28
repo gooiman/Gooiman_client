@@ -1,10 +1,10 @@
 import { usePageInfo } from '@/api/hooks/usePages';
-import { useUserStore } from '@/store/useUserStore'; 
+import { useUserStore } from '@/store/useUserStore';
 
 const Test = () => {
   // zustand 스토어에서 pageId 가져오기
   const pageId = useUserStore((state) => state.pageId);
-  console.log("🚀 ~ file: Test.page.tsx:7 ~ Test ~ pageId:", pageId)
+  console.log('🚀 ~ file: Test.page.tsx:7 ~ Test ~ pageId:', pageId);
 
   // usePageInfo 훅을 사용해 데이터를 가져옴
   const { data, isLoading, isError } = usePageInfo(pageId || '');

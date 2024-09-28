@@ -1,6 +1,6 @@
 export const API_ENDPOINTS = {
   MEMO: {
-    CREATE_MEMOS: '/memos', 
+    MEMOS: '/memos', 
     MODIFY_MEMO: '/memos/:memoId',
   },
   AUTH: {
