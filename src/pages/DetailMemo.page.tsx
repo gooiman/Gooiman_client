@@ -1,5 +1,11 @@
+import Memo from '@/components/memo/memo';
+
 const DetailMemo = () => {
-  return <>DetailMemoPage</>;
+  return (
+    <>
+      <Memo />
+    </>
+  );
 };
 
 export default DetailMemo;

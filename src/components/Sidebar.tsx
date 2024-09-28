@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import SVGBlueCloud from '../assets/BlueCloud.svg?react';
@@ -13,10 +13,16 @@ interface SubMenuProps {
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  data: { [key: string]: { [key: string]: string[] } };
 }
 
-const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
-  const [menuStates, setMenuStates] = useState(Array(8).fill(false));
+const Sidebar = ({ isOpen, onToggle, data }: SidebarProps) => {
+  const [menuStates, setMenuStates] = useState<boolean[]>([]);
+  const categories = Object.keys(data);
+
+  useEffect(() => {
+    setMenuStates(Array(categories.length).fill(false)); // 메뉴 상태 초기화
+  }, [categories.length]);
 
   const toggleMenu = (index: number) => {
     setMenuStates((prev) => {
@@ -36,245 +42,26 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
       </SVGBlueCloudContainer>
       <SectionTitle>연합해커톤</SectionTitle>
       <Menu>
-        <MenuItem onClick={() => toggleMenu(0)}>
-          {menuStates[0] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>기획</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[0]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(1)}>
-          {menuStates[1] ? <SVGMenuOpened /> : <SVGMenuClosed />}
-          <MenuItemText>프론트엔드</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[1]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(2)}>
-          {menuStates[2] ? <SVGMenuOpened /> : <SVGMenuClosed />}
-          <MenuItemText>디자인</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[2]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(3)}>
-          {menuStates[3] ? <SVGMenuOpened /> : <SVGMenuClosed />}
-          <MenuItemText>백엔드</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[3]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-      </Menu>
-
-      <SectionTitle>단풍톤</SectionTitle>
-      <Menu>
-        <MenuItem onClick={() => toggleMenu(4)}>
-          {menuStates[4] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>기획</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[4]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(5)}>
-          {menuStates[5] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>프론트엔드</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[5]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(6)}>
-          {menuStates[6] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>디자인</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[6]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
-        <MenuItem onClick={() => toggleMenu(7)}>
-          {menuStates[7] ? <SVGMenuOpened /> : <SVGMenuClosed />} <MenuItemText>백엔드</MenuItemText>
-        </MenuItem>
-        <SubMenu isSubMenuOpen={menuStates[7]}>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-          <SubMenuItem>
-            <SVGSunContainer>
-              <SVGSun />
-            </SVGSunContainer>
-            <SubMenuItemText>구름이랑 어쩌구</SubMenuItemText>
-          </SubMenuItem>
-        </SubMenu>
+        {categories.map((category, index) => (
+          <div key={category}>
+            <MenuItem onClick={() => toggleMenu(index)}>
+              {menuStates[index] ? <SVGMenuOpened /> : <SVGMenuClosed />}
+              <MenuItemText>{category}</MenuItemText>
+            </MenuItem>
+            <SubMenu isSubMenuOpen={menuStates[index]}>
+              {Object.keys(data[category]).map((subCategory) =>
+                data[category][subCategory].map((item) => (
+                  <SubMenuItem key={item}>
+                    <SVGSunContainer>
+                      <SVGSun />
+                    </SVGSunContainer>
+                    <SubMenuItemText>{item}</SubMenuItemText>
+                  </SubMenuItem>
+                ))
+              )}
+            </SubMenu>
+          </div>
+        ))}
       </Menu>
     </SidebarContainer>
   );
