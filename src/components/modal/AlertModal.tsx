@@ -5,25 +5,18 @@ interface AlertModalProps {
   title: string;
   message: string;
   isOpen: boolean;
+  onClose: () => void;
   onSuccess: () => void;
 }
-const AlertModal = ({ title, message, isOpen, onSuccess }: AlertModalProps) => {
-  const closeModalAction = () => {
-    onSuccess();
-  };
-
+const AlertModal = ({ title, message, isOpen, onClose, onSuccess }: AlertModalProps) => {
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={closeModalAction}
-      contentLabel="Alert"
-      ariaHideApp={false}
-      style={ModalStyle}
-    >
+    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Alert" ariaHideApp={false} style={ModalStyle}>
       <ModalContent>
-        <Title>{title}</Title>
-        <Message>{message}</Message>
-        <CloseButton onClick={closeModalAction}>확인</CloseButton>
+        <TextWrapper>
+          <Title>{title}</Title>
+          <Title>{message}</Title>
+        </TextWrapper>
+        <CloseButton onClick={onSuccess}>YES</CloseButton>
       </ModalContent>
     </Modal>
   );
@@ -51,22 +44,23 @@ const ModalStyle = {
 };
 
 const ModalContent = Styled.div`
-  padding: 20px;
+  padding: 20px 45px;
+`;
+const TextWrapper = Styled.div`
+  margin: 57px 0 30px;
 `;
 
-const Title = Styled.h1`
+const Title = Styled.div`
   font-size: 1.5rem;
-  margin-bottom: 10px;
-`;
-
-const Message = Styled.p`
-  font-size: 1rem;
-  margin-bottom: 10px;
 `;
 
 const CloseButton = Styled.button`
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: var(--skyBlue1);
+  // 중앙 정렬
+  margin: 0 auto;
+  display: block;
+  font-family: 'PressStart2P';
   color: white;
   border: none;
   border-radius: 5px;
