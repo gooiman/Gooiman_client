@@ -3,16 +3,20 @@ import styled from '@emotion/styled';
 import SVGBlueCloud from '../../assets/BlueCloud.svg?react';
 import SVGMemoPencil from '../../assets/MemoPencil.svg?react';
 
-const Memo = () => {
+interface MemoProps {
+  id: number;
+  title: string;
+  content: string;
+}
+
+const Memo = ({ id, title, content }: MemoProps) => {
   return (
     <MemoContainer>
       <MemoTitleContainer>
-        <MemoTitle>해커톤 성공하는 법</MemoTitle>
+        <MemoTitle>{title}</MemoTitle>
       </MemoTitleContainer>
       <MemoContentContainer>
-        <MemoContent>
-          냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐냐
-        </MemoContent>
+        <MemoContent>{content}</MemoContent>
       </MemoContentContainer>
       <CloudContainer>
         <OddCloudContainer>
