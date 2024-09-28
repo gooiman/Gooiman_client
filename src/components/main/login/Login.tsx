@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLogin } from '@/api/hooks/useUser'; // 로그인 훅 가져오기
+import { useUserStore } from '@/store/useUserStore'; // zustand 스토어 불러오기
 import Logo from '@/assets/GooimanLogo.svg?react';
 import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
@@ -17,9 +19,37 @@ const Login = ({ setPageId, pageId }: Props) => {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = async () => {
-    //로그인 로직
-    setIsLoggedIn(true);
+  const { isAuthenticated, login } = useUserStore(); // zustand의 상태 및 login 함수 가져오기
+  const loginMutation = useLogin(); // useLogin 훅 사용
+
+  // 컴포넌트가 로드될 때 localStorage에서 로그인 상태 확인
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    const userName = localStorage.getItem('userName');
+    if (authToken && userName) {
+      setIsLoggedIn(true); // 로컬스토리지에 토큰이 있으면 로그인 상태로 설정
+      setName(userName); // 로컬스토리지에서 이름 불러오기
+    }
+  }, []);
+
+  const handleLogin = () => {
+    if (!pageId) {
+      console.warn('Page ID is missing.');
+      return;
+    }
+
+    // 로그인 요청 보내기
+    loginMutation.mutate(
+      { pageId, name, password },
+      {
+        onSuccess: (data) => {
+          if (data) {
+            login(data.token, name); // zustand에 토큰과 이름 저장
+            setIsLoggedIn(true); // 로그인 성공 시 UI 상태 변경
+          }
+        },
+      }
+    );
   };
 
   const LoginComplete = () => {
@@ -36,7 +66,7 @@ const Login = ({ setPageId, pageId }: Props) => {
   return (
     <Container>
       <Logo style={{ width: '100%' }} />
-      {isLoggedIn ? (
+      {isAuthenticated || isLoggedIn ? ( // zustand의 상태 또는 localStorage에 따라 UI 변경
         <LoginComplete />
       ) : (
         <LoginContainer>
@@ -102,7 +132,7 @@ const Auth = styled.p`
   color: var(--gray8);
   font-size: 20px;
   span {
-    color: var(--skyBlue1); /* 원하는 색상으로 변경 */
+    color: var(--skyBlue1);
   }
 `;
 
