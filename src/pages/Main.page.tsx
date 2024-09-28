@@ -8,13 +8,16 @@ import Login from '@/components/main/login/Login';
 import CloudArea from '@/components/main/CloudArea';
 import { useUpdatePages } from '@/api/hooks/useUser';
 import { useUserStore } from '@/store/useUserStore';
-
+import { usePageInfo } from '@/api/hooks/usePages';
 const Main = () => {
   const { showModal } = useModalStore();
   const { pageId, setPageId } = useUserStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
 
   const { mutate: updatePage, data: pageInfo, isError } = useUpdatePages();
+  const { data, isError: isPageError } = usePageInfo(pageId || '', isAuthenticated);
+  console.log('🚀 ~ file: Main.page.tsx:21 ~ Main ~ data:', data);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -36,7 +39,7 @@ const Main = () => {
     }
   }, [pageInfo, setPageId]);
 
-  if (isError) {
+  if (isError || isPageError) {
     return <div>Error loading page</div>;
   }
 

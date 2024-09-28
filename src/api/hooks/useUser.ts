@@ -22,7 +22,7 @@ const loginUser = async (pageId: string, name: string, password: string) => {
     password,
   });
   console.log('🚀 ~ file: useUser.ts:7 ~ loginUser ~ data:', data.data);
-  return data.data; 
+  return data.data;
 };
 
 // useMutation 훅을 이용하여 로그인 요청 실행
