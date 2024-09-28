@@ -8,6 +8,9 @@ import SVGPencil from '@/assets/Pencil.svg?react';
 import AlertModal from '@/components/modal/AlertModal';
 import TopicDropdown from '@/components/modal/TopicDropdown';
 import MemoInput from '@/components/modal/MemoInput';
+import { useCreateMemo } from '@/api/hooks/useMemo';
+import { useUserStore } from '@/store/useUserStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const colors = ['#82AFFF', '#FF6B6B', '#FFE66D', '#6BFFB3', '#B39CD0'];
 const maxChars = 150;
@@ -15,6 +18,7 @@ const maxChars = 150;
 interface CreateMemoProps {
   modalId: string;
 }
+
 interface TopicState {
   mainTopic: string;
   selectedColor: string;
@@ -24,8 +28,8 @@ interface TopicState {
 
 const CreateMemo = ({ modalId }: CreateMemoProps) => {
   const { modals, closeModal } = useModalStore();
+  const { pageId, name } = useUserStore();
 
-  // 대주제와 소주제 상태 관리
   const [mainTopicState, setMainTopicState] = useState<TopicState>({
     mainTopic: '',
     selectedColor: colors[0],
@@ -46,16 +50,54 @@ const CreateMemo = ({ modalId }: CreateMemoProps) => {
   const [showDeleteAlert, setDeleteAlert] = useState<boolean>(false);
   const [showSaveAlert, setShowSaveAlert] = useState<boolean>(false);
 
-  // 저장 완료시 로직
-  const onSaveSuccess = () => {
+  const createMemoMutation = useCreateMemo(); // 메모 생성/수정 훅
+  const queryClient = useQueryClient();
+
+  if (!pageId) {
+    return null;
+  }
+
+  // 모달 다 닫기
+  const closeAllModals = () => {
     closeModal(modalId);
+    setDeleteAlert(false);
     setShowSaveAlert(false);
   };
 
-  // 삭제 완료 시 로직
-  const onDeleteSuccess = () => {
-    setDeleteAlert(false);
+  // 삭제 시 로직
+  const handleDelete = () => {
     closeModal(modalId);
+    setDeleteAlert(false);
+  };
+
+  // 저장 완료시 로직
+  const onSaveSuccess = () => {
+    if (!mainTopicState.selectedTopicBlock || !subTopicState.selectedTopicBlock) {
+      console.error('주제 또는 소주제가 선택되지 않았습니다.');
+      return;
+    }
+
+    const memoData = {
+      page_id: pageId,
+      author: name,
+      title,
+      category: mainTopicState.selectedTopicBlock.text,
+      sub_category: subTopicState.selectedTopicBlock.text,
+      content,
+      color: mainTopicState.selectedTopicBlock.color,
+    };
+
+    createMemoMutation.mutate(memoData, {
+      onSuccess: () => {
+        closeModal(modalId);
+        console.log('메모 저장 완료:', memoData);
+        setShowSaveAlert(false);
+        queryClient.invalidateQueries({ queryKey: ['pageInfo'] });
+      },
+      onError: (error) => {
+        console.error('메모 저장 실패:', error);
+      },
+    });
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -175,14 +217,14 @@ const CreateMemo = ({ modalId }: CreateMemoProps) => {
         isOpen={showDeleteAlert}
         title="이 메모장을 삭제하시겠습니까?"
         onClose={() => setDeleteAlert(false)}
-        onSuccess={onDeleteSuccess}
+        onSuccess={handleDelete}
       />
       <AlertModal
         isOpen={showSaveAlert}
         title="저장되지 않았습니다!"
         message="이대로 종료하시겠습니까?"
         onClose={() => setShowSaveAlert(false)}
-        onSuccess={onSaveSuccess}
+        onSuccess={closeAllModals}
       />
     </SidebarModal>
   );
@@ -286,6 +328,7 @@ const TextTitle = Styled.div`
     font-size: 1.2rem;
   }
 `;
+
 const TextTitleSecond = Styled.div`
   font-size: 1.5rem;
   color: #4d4d4d;
