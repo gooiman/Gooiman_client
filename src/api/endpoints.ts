@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login/:pageId',
     LOGOUT: '/auth/logout',
+    PUT_PAGE: '/page'
   },
   PAGE: {
     GET_PAGE: '/page/:pageId',

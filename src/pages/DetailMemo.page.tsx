@@ -1,11 +1,5 @@
-import Memo from '@/components/memo/memo';
-
 const DetailMemo = () => {
-  return (
-    <>
-      <Memo />
-    </>
-  );
+  return <div>hi</div>;
 };
 
 export default DetailMemo;
