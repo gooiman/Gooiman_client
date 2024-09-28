@@ -48,7 +48,6 @@ export const useUserStore = create<UserState>()(
   )
 );
 
-// This function initializes the app by checking if there's a token in localStorage
 const initializeApp = () => {
   const token = localStorage.getItem('authToken');
   if (token) {

@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { getToken } from '@/utils/auth-utils';
-
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const apiUrl = import.meta.env.VITE_API;
+console.log('API URL:', apiUrl); // 이 줄을 추가하여 URL을 확인
 
 import { useUserStore } from '@/store/useUserStore';
 
@@ -19,9 +18,9 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
-    const token = getToken(); // 토큰 가져오기
+    const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // 토큰이 있으면 헤더에 추가
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -33,10 +32,26 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response && error.response.status === 401) {
-      console.warn('Unauthorized, logging out...');
-      useAppStore.getState().logout(); // 401 에러 발생 시 로그아웃 처리
+    if (error.response) {
+      const status = error.response.status;
+
+      // Unauthorized
+      if (status === 401) {
+        console.warn('Unauthorized, logging out...');
+        useUserStore.getState().logout();
+      }
+      // Server error
+      else if (status >= 500) {
+        console.warn('Server error occurred:', error.response.data);
+        useUserStore.getState().logout();
+      }
+      // Other errors
+      else {
+        console.error('Error response:', error.response.data);
+        useUserStore.getState().logout();
+      }
     }
+    console.log(Response);
     return await Promise.reject(error);
   }
 );
