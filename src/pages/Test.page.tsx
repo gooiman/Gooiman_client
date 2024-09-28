@@ -24,7 +24,7 @@ const Test = () => {
       <h1>Page Info</h1>
       {/* 페이지 정보 표시 */}
       <p>Page ID: {pageId}</p>
-      {data?.success && <p>Page Data ID: {data.data.id}</p>}
+      <p>Page Data ID: {data.data.id}</p>
     </div>
   );
 };
