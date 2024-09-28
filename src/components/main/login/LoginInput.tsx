@@ -3,14 +3,16 @@ import styled from '@emotion/styled';
 interface Props {
   text: string;
   value: string;
+  font?: string | undefined;
+  type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const LoginInput = ({ text, value, onChange }: Props) => {
+const LoginInput = ({ text, value, type, font, onChange }: Props) => {
   return (
     <Container>
       <Label>{text}</Label>
-      <InputContainer value={value} onChange={onChange} />
+      <InputContainer value={value} type={type} font={font} onChange={onChange} />
     </Container>
   );
 };
@@ -33,7 +35,7 @@ const Label = styled.p`
   text-align: center;
 `;
 
-const InputContainer = styled.input`
+const InputContainer = styled.input<{ font?: string }>`
   border: 1px solid var(--skyBlue1);
   border-radius: 5px;
   background-color: var(--skyBlue3);
@@ -45,6 +47,7 @@ const InputContainer = styled.input`
   }
   padding: 10px;
   box-sizing: border-box;
+  font-family: ${({ font }) => font};
 `;
 
 export default LoginInput;

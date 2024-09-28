@@ -43,8 +43,8 @@ const Login = ({ setPageId, pageId }: Props) => {
         <LoginComplete />
       ) : (
         <LoginContainer>
-          <LoginInput text="name" value={name} onChange={(e) => setName(e.target.value)} />
-          <LoginInput text="pw" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <LoginInput text="name" value={name} type="text" font="BMHANNA" onChange={(e) => setName(e.target.value)} />
+          <LoginInput text="pw" value={password} type="password" onChange={(e) => setPassword(e.target.value)} />
           <LoginButton onClick={handleLogin} />
         </LoginContainer>
       )}
